@@ -1,0 +1,13 @@
+29/01/2026 meeting minutes
+
+present: Dylan, Ethan, Raadhesh
+duration: 1:00pm - 1:25pm
+
+points:
+ - demonstrated protype to client and explained its workings
+ - client was impressed with current progress
+ - client has recommended what steps should be taken next
+
+next steps:
+ - testing prototype with different cameras and larger spaces
+ - begin classification of actions
