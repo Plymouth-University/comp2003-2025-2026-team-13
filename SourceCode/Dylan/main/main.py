@@ -3,9 +3,14 @@ from ultralytics import YOLO
 import numpy as np
 
 model = YOLO('yolov8n-pose.pt')             #model used might change
-cap = cv2.VideoCapture("IMG_6356.MOV")                   #access webcam. 0 tries for the webcam
+cap = cv2.VideoCapture(0)#"IMG_6356.MOV"                   #access webcam. 0 tries for the webcam
 current = False
-
+fall_count = 0
+prev_hip_y = None
+fall_detect = False
+fall_frames = 0
+frame_count = 4
+velocity = 0
 
 def angle(a, b, c) :                         #checks the angle of the legs and returns it
     ba = a - b
@@ -30,6 +35,9 @@ while True:
     for keypoints in res[0].keypoints.data: #plot each keypoint 
         keypoints = keypoints.cpu().numpy()
 
+
+
+    #print keypoints
         for i, keypoint in enumerate(keypoints):
             x,y,confidence = keypoint
             if confidence > 0.7:
@@ -40,6 +48,8 @@ while True:
                             cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255,255,255), 1,cv2.LINE_AA) #keypoints named with a number
 
 
+
+    #lines between keypoints
     connections = [             #lines between the numbered keypoints
         (3,1), (1,0), (0,2), 
         (2,4), (1,2), (4,6), 
@@ -57,6 +67,9 @@ while True:
         if conf1 > 0.5 and conf2 > 0.5: #drawing th lines onto the blank page
             cv2.line(blank, (int(x1), int(y1)), (int(x2),int(y2)), (255,0,255),thickness=2)
     
+
+
+    #check for sitting
     hip = keypoints[11]     #keypoints for legs
     knee = keypoints[13]
     ankle = keypoints[15]
@@ -69,10 +82,46 @@ while True:
     else:
         standing = "Standing"
 
+    
+    #fall detection
+    #body angle
+    shoulder_mid = (keypoints[5][:2] + keypoints[6][:2])/2  #find the middle keypoint between shoulders
+    hip_mid = (keypoints[11][:2] + keypoints[12][:2])/2     #find the middle keypoint between hips
+
+    dx = hip_mid[0] - shoulder_mid[0]                       #x and y for both
+    dy = hip_mid[1] - shoulder_mid[1]
+
+    body_angle = np.degrees(np.arctan2(dy,dx))              #find the angle of this middle line created from dy and dx
+    horizontal = abs(body_angle) < 60                       #body angle q
+    print("Angle: " , body_angle)
+    print("Horizontal: " , horizontal)
+
+    #speed
+    
+    if prev_hip_y is not None:
+        velocity = hip_mid[1] - prev_hip_y
+    else:
+        velocity = 0
+    
+    prev_hip_y = hip_mid[1]    
+    fall_speed = velocity > 40
+    print("Speed: " , fall_speed)
+
+    if horizontal and fall_speed:
+        fall_frames += 1
+    #else:
+    #    fall_frames = 0
+
+    if fall_frames == 5:
+        fall_detect = True
+    print("fall frames: " , fall_frames)
 
     cv2.putText(blank, standing , (int(10), int(10)), 
         cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255,255,255), 1,cv2.LINE_AA) #keypoints named with a number
     
+
+    if fall_detect == True:
+        print("FALL DETECTED")
 
     cv2.imshow('frame',frame)           #display the camera and the keypoints
     cv2.imshow('Skeleton', blank)
