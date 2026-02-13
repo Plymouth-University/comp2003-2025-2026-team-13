@@ -112,7 +112,7 @@ while True:
     #else:
     #    fall_frames = 0
 
-    if fall_frames == 5:
+    if fall_frames == 1:
         fall_detect = True
     print("fall frames: " , fall_frames)
 
