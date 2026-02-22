@@ -1,15 +1,16 @@
 import cv2
 from ultralytics import YOLO
 import numpy as np
+import time
 
 model = YOLO('yolov8n-pose.pt')             #model used might change
-cap = cv2.VideoCapture(0)#"IMG_6356.MOV"                   #access webcam. 0 tries for the webcam
+cap = cv2.VideoCapture(0)                   #access webcam. 0 tries for the webcam
 current = False
 fall_count = 0
 prev_hip_y = None
+prev_time = None
 fall_detect = False
 fall_frames = 0
-frame_count = 4
 velocity = 0
 
 def angle(a, b, c) :                         #checks the angle of the legs and returns it
@@ -92,30 +93,39 @@ while True:
     dy = hip_mid[1] - shoulder_mid[1]
 
     body_angle = np.degrees(np.arctan2(dy,dx))              #find the angle of this middle line created from dy and dx
-    horizontal = abs(body_angle) < 60                       #body angle q
-    print("Angle: " , body_angle)
-    print("Horizontal: " , horizontal)
+    horizontal = abs(body_angle) < 30  or abs(body_angle) > 150                      #body angle q
+    #print("Angle: " , body_angle)
+    #print("Horizontal: " , horizontal)
 
     #speed
-    
-    if prev_hip_y is not None:
-        velocity = hip_mid[1] - prev_hip_y
+    current_time = time.time()                              #get the current time of the frame
+    if prev_hip_y != None:
+        dy = hip_mid[1] - prev_hip_y                        #find hip midpoint minus the last detected midpoint
+        dt = current_time - prev_time                       #find time between frames
+        velocity = dy/dt                                    #find velocity
     else:
         velocity = 0
-    
-    prev_hip_y = hip_mid[1]    
-    fall_speed = velocity > 40
-    print("Speed: " , fall_speed)
 
+    #print("Velocity: " , velocity)
+
+    fall_speed = abs(velocity) > 200                        #if velocity exceeds 200 trigger fall_speed
+    prev_hip_y = hip_mid[1]
+    prev_time = current_time    
+    #print("Speed: " , fall_speed)
+
+    #final fall check
     if horizontal and fall_speed:
         fall_frames += 1
-    #else:
-    #    fall_frames = 0
-
-    if fall_frames == 1:
+    else:
+        fall_frames = 0
+    
+    if fall_frames >= 0:
         fall_detect = True
-    print("fall frames: " , fall_frames)
 
+    #print("fall frames: " , fall_frames)
+
+
+    #display
     cv2.putText(blank, standing , (int(10), int(10)), 
         cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255,255,255), 1,cv2.LINE_AA) #keypoints named with a number
     
