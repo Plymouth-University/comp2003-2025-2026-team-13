@@ -1,0 +1,19 @@
+{
+  "name": "packagee",
+  "version": "1.0.0",
+  "description": "Webserver",
+  "keywords": [
+    "mee"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "link1"
+  },
+  "license": "UNLICENSED",
+  "author": "Ethan",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "node server.js"
+  }
+}

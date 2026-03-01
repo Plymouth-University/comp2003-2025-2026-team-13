@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Video UI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000000;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .option {
+            width: 200px;
+            padding: 15px;
+            margin: 15px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .option:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="option" onclick="alert('Opened!')">Option 1</div>
+    <div class="option" onclick="alert('Opened!')">Option 2</div>
+    <div class="option" onclick="alert('Opened!')">Option 3</div>
+</div>
+
+</body>
+</html>
