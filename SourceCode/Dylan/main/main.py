@@ -2,10 +2,12 @@ import cv2
 from ultralytics import YOLO
 import numpy as np
 import time
+import csv
+from datetime import datetime
 
 model = YOLO('yolov8n-pose.pt')             #model used might change
 cap = cv2.VideoCapture(0)                   #access webcam. 0 tries for the webcam
-current = False
+current_activity = None
 fall_count = 0
 prev_hip_y = None
 prev_time = None
@@ -38,7 +40,7 @@ while True:
 
 
 
-    #print keypoints
+    #DISPLAY KEYPOINTS
         for i, keypoint in enumerate(keypoints):
             x,y,confidence = keypoint
             if confidence > 0.7:
@@ -50,7 +52,7 @@ while True:
 
 
 
-    #lines between keypoints
+    #LINES BETWEEN KEYPOINTS
     connections = [             #lines between the numbered keypoints
         (3,1), (1,0), (0,2), 
         (2,4), (1,2), (4,6), 
@@ -70,7 +72,7 @@ while True:
     
 
 
-    #check for sitting
+    #SITTING AND STANDING
     hip = keypoints[11]     #keypoints for legs
     knee = keypoints[13]
     ankle = keypoints[15]
@@ -79,12 +81,12 @@ while True:
 
     
     if knee_angle < 140:                    #should the angle be less than 140 they are sitting
-        standing = "Sitting"
+        status = "Sitting"
     else:
-        standing = "Standing"
+        status = "Standing"
 
     
-    #fall detection
+    #FALL DETECTION
     #body angle
     shoulder_mid = (keypoints[5][:2] + keypoints[6][:2])/2  #find the middle keypoint between shoulders
     hip_mid = (keypoints[11][:2] + keypoints[12][:2])/2     #find the middle keypoint between hips
@@ -120,19 +122,23 @@ while True:
         fall_frames = 0
     
     if fall_frames >= 1:
-        fall_detect = True
+        status = "FALL DETECTED"
 
     #print("fall frames: " , fall_frames)
 
 
+    #WRITE TO CSV
+    if current_activity != status:
+        with open("activity.csv", mode="a", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow([datetime.now(), status])
+        current_activity = status
+
+
     #display
-    cv2.putText(blank, standing , (int(10), int(10)), 
+    cv2.putText(blank, status , (int(10), int(10)), 
         cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255,255,255), 1,cv2.LINE_AA) #keypoints named with a number
     
-
-    if fall_detect == True:
-        print("FALL DETECTED")
-
     cv2.imshow('frame',frame)           #display the camera and the keypoints
     cv2.imshow('Skeleton', blank)
     if cv2.waitKey(1) & 0xFF == ord('q'):   #'q' pressed to end the loop
