@@ -6,6 +6,10 @@ Discussed topics:
 - Current progress to catch Finn up on what he has missed.
 - Potential methods to link the python code with the web server.
 
+potential methods:
+- Java access the python file from the same directory
+- Flask code in the python to link the java and python
+
 Tasks:
 Dylan - documentation on the python program
 Ethan - link the camera stream on the website interface to the python program on the web server, contact client
