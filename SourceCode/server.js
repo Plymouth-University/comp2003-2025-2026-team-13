@@ -17,14 +17,16 @@ const server = http.createServer((req, res) => {
             }
         });
     } else {
-        // simple 404 for other routes
         res.statusCode = 404;
         res.setHeader('Content-Type', 'text/plain');
         res.end('Not found');
     }
 });
 
-const PORT = 6767;
+const PORT = 6768;
 server.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}/`);
 });
+
+
+
