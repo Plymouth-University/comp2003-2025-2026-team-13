@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Setitngs</title>
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<h1>Settings</h1>
+<a class="MenuButton" href="Settings.html">Settings </a>
+<a class="MenuButton" href="Homepage.Html">Homepage</a>
+
+
+<h2>Account Details</h2>
+
+<form>
+<label>Username:</label>
+<input type="text" id="UserName">
+
+<label>Date of Birth:</label>
+<input type="date" name="DOB">
+
+<br><br>
+
+<label>Email:</label>
+<input type="email" name="Email">
+
+<label>Adress</label>
+<input type="adress" name="Adress">
+
+<br><br>
+
+<label>Phone Number:</label>
+<input type="text" name="PhoneNumber">
+
+<br><br>
+
+<label>Password:</label>
+<input type="password" name="Password">
+
+<br><br>
+
+<label>Next Of Kin:</label>
+<input type="text" name="NextOfKin">
+
+<br><br>
+
+<label>Current GP</label>
+<input type="text" name="CurrentGP">
+
+<br><br>
+
+<button type="button" onclick="SaveUser()">Save</button>
+</form>
+
+
+<script>
+function SaveUser() {
+    var name = document.getElementById("UserName").value;
+    localStorage.setItem("UserName", name);
+}
+</script>
+
+
+<h2>Website Settings</h2>
+
+<form>
+
+<label>Dark Mode</label>
+<input type="checkbox" name="DarkMode">
+
+<br><br>
+
+<label>Notifications</label>
+<input type="checkbox" name="Notifications">
+
+<br><br>
+
+<label>Camera Access</label>
+<input type="checkbox" name="CameraAccess">
+
+<br><br>
+
+<label>Deactivate Account</label>
+<input type="checkbox" name="DeactivateAccount">
+
+<br><br>
+
+<button type="submit">Save</button>
+
+</form>
+
+<br>
+
+<a href="index.html">Back</a>
+
+
+
+</body>
+</html>
