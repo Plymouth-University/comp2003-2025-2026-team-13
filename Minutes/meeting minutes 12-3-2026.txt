@@ -1,0 +1,19 @@
+12/03/2026
+Present: Dylan, Taiyo, Finn, Ethan
+Duration: 51 minutes
+
+Discussed topics:
+- implementation of python onto web server
+	The team has decided on using flask as a link between the html and the python backend
+- Next meeting with client is Friday 13th at 12:30pm
+
+
+Issues:
+- Finn required assistance running the web server on his local device for test purposes (resolved the same day)
+- Taiyo's computer has stopped working. He will be doing documentation until a solution has arrived
+
+Tasks:
+Taiyo - Documentation
+Dylan - Documentation
+Finn - Html buttons for web server interface
+Ethan - Flask implementation for web server
