@@ -2,27 +2,27 @@
 <html>
 
 <head>
-<title>Diagnostics</title>
-<link rel="stylesheet" href="style.css">
+    <title>Diagnostics</title>
+    <link rel="stylesheet" href="style.css">
 
 </head>
 
 <body>
 
-<h1>Diagnostics Page</h1>
-<a class="MenuButton" href="Settings.html">Settings </a>
-<a class="MenuButton" href="buttons.html">Homepage</a>
+    <h1>Diagnostics Page</h1>
+    <a class="MenuButton" href="Settings.html">Settings </a>
+    <a class="MenuButton" href="buttons.html">Homepage</a>
 
 
 
-<button onclick="showInfo()">Show Diagnostics</button>
+    <button onclick="showInfo()">Show Diagnostics</button>
 
-<div id="UserBox"></div>
+    <div id="UserBox"></div>
 
-<script>
-var name = localStorage.getItem("UserName");
-document.getElementById("UserBox").innerHTML = "Username: " + name;
-</script>
+    <script>
+        var name = localStorage.getItem("UserName");
+        document.getElementById("UserBox").innerHTML = "Username: " + name;
+    </script>
 
 
 </body>
