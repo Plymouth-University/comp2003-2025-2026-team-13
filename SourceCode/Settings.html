@@ -1,99 +1,99 @@
 <!DOCTYPE html>
 <html>
 
+
 <head>
-    <title>Setitngs</title>
-    <link rel="stylesheet" href="style.css">
+<title>Setitngs</title>
+<link rel="stylesheet" href="style.css">
 
 </head>
 
 <body>
 
-    <h1>Settings</h1>
-    <a class="MenuButton" href="buttons.html">Homepage</a>
-    <a class="MenuButton" href="Diagnostics.html">Diagnostics</a>
+<h1>Settings</h1>
+<a class="MenuButton" href="buttons.html">Homepage</a>
 
 
-    <h2>Account Details</h2>
+<h2>Account Details</h2>
 
-    <form>
-        <label>Username:</label>
-        <input type="text" id="UserName">
+<form>
+<label>Username:</label>
+<input type="text" id="UserName">
 
-        <label>Date of Birth:</label>
-        <input type="date" name="DOB">
+<label>Date of Birth:</label>
+<input type="date" name="DOB">
 
-        <br><br>
+<br><br>
 
-        <label>Email:</label>
-        <input type="email" name="Email">
+<label>Email:</label>
+<input type="email" name="Email">
 
-        <label>Adress</label>
-        <input type="text" name="Adress">
+<label>Adress</label>
+<input type="adress" name="Adress">
 
-        <br><br>
+<br><br>
 
-        <label>Phone Number:</label>
-        <input type="tel" name="PhoneNumber">
+<label>Phone Number:</label>
+<input type="text" name="PhoneNumber">
 
-        <br><br>
+<br><br>
 
-        <label>Password:</label>
-        <input type="password" name="Password">
+<label>Password:</label>
+<input type="password" name="Password">
 
-        <br><br>
+<br><br>
 
-        <label>Next Of Kin:</label>
-        <input type="text" name="NextOfKin">
+<label>Next Of Kin:</label>
+<input type="text" name="NextOfKin">
 
-        <br><br>
+<br><br>
 
-        <label>Current GP</label>
-        <input type="text" name="CurrentGP">
+<label>Current GP</label>
+<input type="text" name="CurrentGP">
 
-        <br><br>
+<br><br>
 
-        <button type="button" onclick="SaveUser()">Save</button>
-    </form>
-
-
-    <script>
-    function SaveUser() {
-        var name = document.getElementById("UserName").value;
-        localStorage.setItem("UserName", name);
-    }
-    </script>
+<button type="button" onclick="SaveUser()">Save</button>
+</form>
 
 
-    <h2>Website Settings</h2>
+<script>
+function SaveUser() {
+    var name = document.getElementById("UserName").value;
+    localStorage.setItem("UserName", name);
+}
+</script>
 
-    <form>
 
-    <label>Dark Mode</label>
-    <input type="checkbox" name="DarkMode">
+<h2>Website Settings</h2>
 
-    <br><br>
+<form>
 
-    <label>Notifications</label>
-    <input type="checkbox" name="Notifications">
+<label>Dark Mode</label>
+<input type="checkbox" name="DarkMode">
 
-    <br><br>
+<br><br>
 
-    <label>Camera Access</label>
-    <input type="checkbox" name="CameraAccess">
+<label>Notifications</label>
+<input type="checkbox" name="Notifications">
 
-    <br><br>
+<br><br>
 
-    <label>Deactivate Account</label>
-    <input type="checkbox" name="DeactivateAccount">
+<label>Camera Access</label>
+<input type="checkbox" name="CameraAccess">
 
-    <br><br>
+<br><br>
 
-    <button type="submit">Save</button>
+<label>Deactivate Account</label>
+<input type="checkbox" name="DeactivateAccount">
 
-    </form>
+<br><br>
 
-    <br>
+<button type="submit">Save</button>
+
+</form>
+
+<br>
 
 
 
