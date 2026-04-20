@@ -21,7 +21,7 @@
             height: 100%;
         }
     </style>
-    <body onload="init_api()">
+    <body>
         <br />
         <div class="fp-Video">
             <div id="play" class="display"></div>
@@ -70,8 +70,9 @@
 
 <div class="container">
     <div class="option" onclick="window.open('https://www.nhs.uk/nhs-services/services-near-you/', '_blank')">Call 999</div>
-    <a class="MenuButton" href="Settings.html">Settings </a>
-    <a class="MenuButton" href="Diagnostics.Html">Diagnostics</a>
+    <a href="/settings">Settings </a>
+    <a href="Diagnostics.html">Diagnostics</a>
+    <h2 id="activity"></h2>
 </div>
 
 </body>
@@ -81,9 +82,11 @@
 <body>
 
     <video id="fp-Video" autoplay playsinline></video>
-
+    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
     <script>
         const video = document.getElementById("fp-Video");
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
 
         async function startWebcam() {
             try {
@@ -97,8 +100,34 @@
                 console.error(error);
             }
         }
+        
 
+        let processing = false;
+        function sendFrame() {
+            if (processing) return;
+            processing = true;
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const image = canvas.toDataURL("image/jpeg");
+
+            fetch("/process_frame", {
+                method: "POST",
+                headers: {
+                    "Content-Type" : "application/json"
+                },
+                body: JSON.stringify({
+                    image:image
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("activity").innerText =
+                "Activity: " + data.activity;
+                processing = false;
+            })
+            .catch(err => console.error(err));
+        }
         startWebcam();
+        setInterval(sendFrame, 200);
     </script>
 
 </body>
