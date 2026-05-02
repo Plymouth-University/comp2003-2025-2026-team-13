@@ -84,18 +84,21 @@
     <video id="fp-Video" autoplay playsinline></video>
     <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
     <script>
+        //get the video footage
         const video = document.getElementById("fp-Video");
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
-
+        //start the webcam
         async function startWebcam() {
             try {
+                //enable video with no audio
                 const stream = await navigator.mediaDevices.getUserMedia({
                     video: true,
                     audio: false
                 });
                 video.srcObject = stream;
             } catch (error) {
+                //denied when the camera is disabled
                 alert("Denied.");
                 console.error(error);
             }
@@ -103,12 +106,16 @@
         
 
         let processing = false;
+        //send the frame through the flask api
         function sendFrame() {
+            //if processing is true cancel sending the next frame else set processing to true and begin
             if (processing) return;
             processing = true;
+            //get the current frame
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             const image = canvas.toDataURL("image/jpeg");
 
+            //feed the image through post to the /process_frame end point
             fetch("/process_frame", {
                 method: "POST",
                 headers: {
@@ -118,6 +125,7 @@
                     image:image
                 })
             })
+            //once a response is recieved print it into the interface
             .then(response => response.json())
             .then(data => {
                 document.getElementById("activity").innerText =
@@ -126,6 +134,7 @@
             })
             .catch(err => console.error(err));
         }
+        //start the webcam and send the frame every 200 ms
         startWebcam();
         setInterval(sendFrame, 200);
     </script>

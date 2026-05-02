@@ -66,8 +66,6 @@ def process_frame(image):
             dy = hip_mid[1] - prev_hip_y                        #find hip midpoint minus the last detected midpoint
             dt = current_time - prev_time                       #find time between frames
             
-            print("dt = " , dt)
-            print("dy = " , dy)
             #if dt > 0 and dt < max_dt:
             velocity = dy/dt                                    #find velocity
             #else:
@@ -75,7 +73,7 @@ def process_frame(image):
         else:
             velocity = 0
 
-        print("Velocity: " , velocity)
+        #print("Velocity: " , velocity)
 
         fall_speed = abs(velocity) > 200                        #if velocity exceeds 200 trigger fall_speed
         prev_hip_y = hip_mid[1]
