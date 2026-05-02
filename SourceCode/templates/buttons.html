@@ -21,7 +21,7 @@
             height: 100%;
         }
     </style>
-    <body onload="init_api()">
+    <body>
         <br />
         <div class="fp-Video">
             <div id="play" class="display"></div>
@@ -70,8 +70,9 @@
 
 <div class="container">
     <div class="option" onclick="window.open('https://www.nhs.uk/nhs-services/services-near-you/', '_blank')">Call 999</div>
-    <a class="MenuButton" href="Settings.html">Settings </a>
-    <a class="MenuButton" href="Diagnostics.html">Diagnostics</a>
+    <a href="/settings">Settings </a>
+    <a href="Diagnostics.html">Diagnostics</a>
+    <h2 id="activity"></h2>
 </div>
 
 </body>
@@ -81,26 +82,62 @@
 <body>
 
     <video id="fp-Video" autoplay playsinline></video>
-
+    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
     <script>
+        //get the video footage
         const video = document.getElementById("fp-Video");
-
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        //start the webcam
         async function startWebcam() {
             try {
+                //enable video with no audio
                 const stream = await navigator.mediaDevices.getUserMedia({
                     video: true,
                     audio: false
                 });
                 video.srcObject = stream;
             } catch (error) {
+                //denied when the camera is disabled
                 alert("Denied.");
                 console.error(error);
             }
         }
+        
 
+        let processing = false;
+        //send the frame through the flask api
+        function sendFrame() {
+            //if processing is true cancel sending the next frame else set processing to true and begin
+            if (processing) return;
+            processing = true;
+            //get the current frame
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const image = canvas.toDataURL("image/jpeg");
+
+            //feed the image through post to the /process_frame end point
+            fetch("/process_frame", {
+                method: "POST",
+                headers: {
+                    "Content-Type" : "application/json"
+                },
+                body: JSON.stringify({
+                    image:image
+                })
+            })
+            //once a response is recieved print it into the interface
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("activity").innerText =
+                "Activity: " + data.activity;
+                processing = false;
+            })
+            .catch(err => console.error(err));
+        }
+        //start the webcam and send the frame every 200 ms
         startWebcam();
+        setInterval(sendFrame, 200);
     </script>
 
 </body>
 </html>
-
